@@ -7,6 +7,7 @@ import wapi.core.CompiledValue;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static java.lang.System.out;
 
@@ -18,7 +19,12 @@ public class InputLoop /*implements Runnable*/ {
         while(Boolean.toBoolean(DataManager.get("rlsh", "continue-shell").bool)) {
             if(Boolean.toBoolean(DataManager.get("rlsh", "ps1-calculated").bool) == true) {
                 out.print(DataManager.get("rlsh", "ps1").string);
-                input = scanner.nextLine();
+                try {
+                    input = scanner.nextLine();
+                } catch(NoSuchElementException e) {
+                    out.println("");
+                    input = "exit";
+                }
                 // TODO Add onCommand for JS plugins
                 String name = input.split(" ")[0].replace("\\s+", "");
                 ArrayList<String> arguments = new ArrayList<>(Arrays.asList(input.split(" ")));
