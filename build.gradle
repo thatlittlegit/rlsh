@@ -1,0 +1,40 @@
+plugins {
+  id "de.undercouch.download" version "3.2.0"
+}
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'rlsh.RlshShell'
+
+repositories {
+	maven {
+		url 'http://wapidstyle.bitbucket.io/'
+		name 'wapidstyle\'s repo'
+	}
+	mavenCentral()
+}
+
+dependencies {
+	compile group: 'wapidstyle', name: 'wapi', version: '1.0.6'
+  compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+}
+
+compileJava {
+  options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+/*
+task go {
+  File wapi = file('build/libs/wapi-1.0.6.jar')
+  if(!wapi.exists()) {
+    download {
+      src 'https://wapidstyle.bitbucket.io/wapidstyle/wapi/1.0.6/wapi-1.0.6.jar'
+      dest 'build/libs'
+    }
+  }
+  print("Starting rlsh")
+  Runtime r = Runtime.getRuntime()
+  Process p = r.exec("java -cp build/libs/rlsh.jar:build/libs/wapi-1.0.6.jar rlsh.RlshShell")
+  p.waitFor()
+}
+*/
