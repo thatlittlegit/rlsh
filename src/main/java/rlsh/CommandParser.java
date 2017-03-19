@@ -68,7 +68,7 @@ public class CommandParser {
                             System.err.println("rlsh: Command " + c.name + " not found.");
                         }
                         // don't do anything if command blank
-                    //}
+                    }
             }
             //
             // the OFFICIAL WALL of CATCHES!
