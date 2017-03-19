@@ -64,12 +64,10 @@ public class CommandParser {
                         }
                     }
                     if(success != true) {
-                        if(c.name.equals("")) {
-                            System.err.println("rlsh: Command not found.");
-                        } else {
+                        if(!c.name.equals("")) {
                             System.err.println("rlsh: Command " + c.name + " not found.");
                         }
-                    }
+                        // don't do anything if command blank
                     //}
             }
             //
