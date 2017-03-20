@@ -1,6 +1,7 @@
 package rlsh;
 
 import wapi.core.DataManager;
+import wapi.core.NullChecker;
 
 import java.util.Hashtable;
 import java.util.ArrayList;
@@ -24,10 +25,21 @@ public class CommandParser {
             }
             // now, get the builtin list as a Hashtable
             Hashtable<String, Class<Command>> builtins = (Hashtable<String, Class<Command>>) rlshShellBuiltins.getField("builtins").get(null);
-
-            if(builtins.get(c.name) != null) {
-                Constructor<Command> toRun = (Constructor<Command>)builtins.get(c.name).getDeclaredConstructor(ArrayList.class);
-                toRun.newInstance(c.arguments).action.run();
+            boolean alias;
+            try {
+                alias = DataManager.get("rlsh", "alias-" + c.name).string == null;
+            } catch(NullPointerException e) {
+                alias = false;
+            }
+            if(alias) {
+                System.out.println("54");
+                CommandParser.run(new Command(DataManager.get("rlsh", "alias-" + c.name).string,
+                                              c.arguments));
+            }
+            if(!NullChecker.isNull(builtins.get(c.name))) {
+                Constructor<Command> toRun = builtins.get(c.name).getDeclaredConstructor(ArrayList.class);
+                CommandAction action = toRun.newInstance(c.arguments).action;
+                action.run();
             } else {
                 // We don't want to use the same catches, as this is a different component.
                 //try {

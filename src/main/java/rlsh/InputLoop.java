@@ -23,6 +23,7 @@ public class InputLoop /*implements Runnable*/ {
                     input = scanner.nextLine();
                 } catch(NoSuchElementException e) {
                     out.println("");
+                    DataManager.put("rlsh", "continue-shell", new CompiledValue(false));
                     input = "exit";
                 }
                 // TODO Add onCommand for JS plugins
