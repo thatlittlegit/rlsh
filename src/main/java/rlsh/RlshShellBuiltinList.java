@@ -10,6 +10,7 @@ public class RlshShellBuiltinList {
         try {
             builtins.put("cd", Class.forName("rlsh.builtins.CommandCd"));
             builtins.put("exit", Class.forName("rlsh.builtins.CommandExit"));
+            builtins.put("alias", Class.forName("rlsh.builtins.CommandAlias"));
         } catch(ClassNotFoundException e) {
             System.err.println("rlsh: error: Required class not found: " + e.getMessage());
             System.err.println("rlsh: error: Your installation may be corrupt.");
