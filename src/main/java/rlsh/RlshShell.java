@@ -35,7 +35,7 @@ public class RlshShell implements Shell {
         DataManager.put("rlsh", "shell-builtin-class", new CompiledValue("rlsh.RlshShellBuiltinList"));
 
         // TODO let user change the default PS1
-        DataManager.put("rlsh", "ps1-uncalculated", new CompiledValue("%$user$%@%$computer$%:%$directory$%$ "));
+        DataManager.put("rlsh", "ps1-uncalculated", new CompiledValue("${user}@${computer}:${directory}$ "));
 
         // Check if Win32, Mac or *nix
         if(SystemUtils.IS_OS_WINDOWS) {
