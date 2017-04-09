@@ -5,6 +5,7 @@ import wapi.core.NullChecker;
 
 import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Constructor;
@@ -81,12 +82,21 @@ public class CommandParser {
         }
 
         if(alias) {
+            ArrayList<String> arguments = new ArrayList<>(c.arguments);
+            try {
+                ArrayList<String> tempArgs = new ArrayList<>();
+                tempArgs.addAll(Arrays.asList(DataManager.get("rlsh", "alias-" + c.name + "-arguments")
+                                               .string.split(" ")));
+                tempArgs.remove(0);
+                arguments.addAll(tempArgs);
+            } catch(NullPointerException e) {}
             CommandParser.run(new Command(DataManager.get("rlsh", "alias-" + c.name).string,
-                                              c.arguments));
+                                              arguments));
         } else if(!NullChecker.isNull(builtins.get(c.name))) {
             try {
                 Constructor<Command> toRun = builtins.get(c.name).getDeclaredConstructor(ArrayList.class);
                 CommandAction action = toRun.newInstance(c.arguments).action;
+
                 action.run();
             } catch(Exception e) {
                 System.err.println("rlsh: error: Failed to run builtin command. This is a problem with your");
