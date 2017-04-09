@@ -104,6 +104,44 @@ public class CommandParser {
                 e.printStackTrace();
                 System.exit(-10);
             }
+        } else if(c.name.equals("")) {
+            // No-op
+        } else if(c.name.startsWith("/")) {
+            // global program
+            if(!new File(c.name).exists()) {
+                System.err.println("rlsh: Executable not found");
+            } else if(new File(c.name).isDirectory()) {
+                System.err.println("rlsh: Can't execute a directory!");
+            } else {
+                try {
+                    c.arguments.add(0, new File(c.name).getAbsolutePath());
+                    ProcessBuilder p = new ProcessBuilder(c.arguments);
+                    p.directory(new File(DataManager.get("rlsh", "directory").string));
+                    p.inheritIO();
+                    p.start().waitFor();
+                } catch(IOException e) {
+                } catch(InterruptedException e) {}
+            }
+        } else if(c.name.startsWith(".")) {
+            // it's a local program
+            StringBuilder programNameBuilder = new StringBuilder(c.name);
+            programNameBuilder.deleteCharAt(0);
+            programNameBuilder.insert(0, c.name);
+            String programName = programNameBuilder.toString();
+            if(!new File(programName).exists()) {
+                System.err.println("rlsh: Executable not found");
+            } else if(new File(programName).isDirectory()) {
+                System.err.println("rlsh: Can't execute a directory!");
+            } else {
+                try {
+                    c.arguments.add(0, new File(programName).getAbsolutePath());
+                    ProcessBuilder p = new ProcessBuilder(c.arguments);
+                    p.directory(new File(DataManager.get("rlsh", "directory").string));
+                    p.inheritIO();
+                    p.start().waitFor();
+                } catch(IOException e) {
+                } catch(InterruptedException e) {}
+            }
         } else {
             // Scan the PATH
             String[] folderPaths = DataManager.get("rlsh", "path").string.split(":");
@@ -112,7 +150,7 @@ public class CommandParser {
                 File folder = new File(folderPath);
                 try {
                     for(File file : folder.listFiles()) {
-                        if(file.exists() && !file.isDirectory()) { 
+                        if(file.exists() && !file.isDirectory()) {
                             if(file.getName().replace("\\s+", "").equals(c.name.replace("\\s+", ""))) {
                                 // found a match!
                                 success = true;
