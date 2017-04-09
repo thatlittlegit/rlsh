@@ -72,19 +72,18 @@ public class CommandParser {
 
     public static void run(Command c) {
         Hashtable<String, Class<Command>> builtins = getFluidBuiltins(BuiltinType.BUILTIN);
+
         boolean alias;
         try {
-            alias = DataManager.get("rlsh", "alias-" + c.name).string == null;
+            alias = !NullChecker.isNull(DataManager.get("rlsh", "alias-" + c.name).string);
         } catch(NullPointerException e) {
             alias = false;
         }
 
         if(alias) {
-            System.out.println("54");
             CommandParser.run(new Command(DataManager.get("rlsh", "alias-" + c.name).string,
                                               c.arguments));
-        }
-        if(!NullChecker.isNull(builtins.get(c.name))) {
+        } else if(!NullChecker.isNull(builtins.get(c.name))) {
             try {
                 Constructor<Command> toRun = builtins.get(c.name).getDeclaredConstructor(ArrayList.class);
                 CommandAction action = toRun.newInstance(c.arguments).action;
