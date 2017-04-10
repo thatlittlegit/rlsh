@@ -38,6 +38,7 @@ public class CommandParser {
                 rlshShellBuiltins.getDeclaredMethod("fillBuiltins").invoke(null);
             }
             // now, get them as a Hashtable
+            @SuppressWarnings("unchecked")
             Hashtable<String, Class<Command>> builtins = (Hashtable<String, Class<Command>>) rlshShellBuiltins.
                 getField("builtins").get(null);
             return builtins;
