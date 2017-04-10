@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class CommandParser {
-    static Hashtable getFluidBuiltins(BuiltinType type) throws IllegalArgumentException {
+    static Hashtable<String, Class<Command>> getFluidBuiltins(BuiltinType type) throws IllegalArgumentException {
         String packageTypeToLookFor;
         switch(type) {
         case BUILTIN:
