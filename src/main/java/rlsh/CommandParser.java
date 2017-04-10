@@ -176,7 +176,28 @@ public class CommandParser {
             }
             if(success != true) {
                 if(!c.name.equals("")) {
-                    System.err.println("rlsh: Command " + c.name + " not found.");
+                    Hashtable<String, Class<Command>> lowBuiltins = getFluidBuiltins(BuiltinType.LOW_BUILTIN);
+
+                    boolean isLowBuiltin = false;
+                    try {
+                        isLowBuiltin = lowBuiltins.get(c.name) != null;
+                    } catch(NullPointerException e) {}
+
+                    if(isLowBuiltin) {
+                        try {
+                            Constructor<Command> toRun = lowBuiltins.get(c.name).getDeclaredConstructor(ArrayList.class);
+                            CommandAction action = toRun.newInstance(c.arguments).action;
+
+                            action.run();
+                        } catch(Exception e) {
+                            System.err.println("rlsh: error: Failed to run low-builtin command. This is a problem with your");
+                            System.err.println("rlsh: error: installation or a plugin. Try removing some plugins.");
+                            e.printStackTrace();
+                            System.exit(-10);
+                        }
+                    } else {
+                        System.err.println("rlsh: Command " + c.name + " not found.");
+                    }
                 }
                 // don't do anything if command blank
             }
