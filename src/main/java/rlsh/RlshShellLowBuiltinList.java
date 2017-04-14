@@ -11,6 +11,7 @@ public class RlshShellLowBuiltinList {
             builtins.put("ls", Class.forName("rlsh.low_builtins.CommandLs"));
             builtins.put("rm", Class.forName("rlsh.low_builtins.CommandRm"));
             builtins.put("mv", Class.forName("rlsh.low_builtins.CommandMv"));
+            builtins.put("cp", Class.forName("rlsh.low_builtins.CommandCp"));
         } catch(ClassNotFoundException e) {
             System.err.println("rlsh: error: Required class not found: " + e.getMessage());
             System.err.println("rlsh: error: Your installation may be corrupt.");
