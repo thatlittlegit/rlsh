@@ -59,6 +59,6 @@ public class StringFormatter {
                 }
             }
         } catch(ArrayIndexOutOfBoundsException e) {} // Ignore
-        return String.join("", outputArray);
+        return StringUtils.join(outputArray, "");
     }
 }
