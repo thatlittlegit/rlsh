@@ -21,7 +21,7 @@ public class CommandHelp extends Command implements CommandAction {
     }
 
     public void run() {
-        if(arguments.size() < 1 || arguments.size() > 1) {
+        if(arguments.size() < 1 || arguments.size() > 1 && (arguments.get(0) != "--help" || arguments.get(0) != "-h")) {
             System.out.println("rlsh by wapidstyle, version 0.1.0");
             System.out.println("an attempt at a cross-platform shell");
             System.out.println("");
@@ -38,6 +38,8 @@ public class CommandHelp extends Command implements CommandAction {
             System.out.println(underline("ls") + " - Lists files.                     " + underline("cp") + " - Copies files");
             System.out.println("");
             System.out.println("For more information, see the " + italic("(currently nonexistant)") + " documentation.");
+        } else if(arguments.get(0) == "--help" || arguments.get(0) == "-h") {
+            System.out.println("rlsh: help: Usage: help [program]");
         } else {
             // NOTE We should probably do a better job at handling the help instead of just passing it on
             ArrayList<String> argsToPass = new ArrayList<>();

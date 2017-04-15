@@ -38,6 +38,8 @@ public class CommandCd extends Command implements CommandAction {
     public void run() {
         if(arguments.isEmpty()) {
             changeDirectory("/home/" + DataManager.get("rlsh", "stringvar-user").string, true);
+        } else if(arguments.get(0) == "--help" || arguments.get(0) == "-h") {
+            System.out.println("rlsh: cd: Usage: cd <directory/-h>");
         } else {
             File toSwitchTo = null;
             if(arguments.get(0).startsWith("/")) {

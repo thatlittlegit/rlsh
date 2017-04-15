@@ -16,8 +16,10 @@ public class CommandAlias extends Command implements CommandAction {
     }
 
     public void run() {
-        if(arguments.size() < 1) {
-            System.err.println("rlsh: alias: Missing operand (it's different from Bash's syntax)");
+        if(arguments.size() < 1 || (arguments.get(0) == "--help" || arguments.get(0) == "-h")) {
+            if(arguments.size() < 1) {
+                System.err.println("rlsh: alias: Missing operand (it's different from Bash's syntax)");
+            }
             System.err.println("rlsh: alias: Usage: alias <command>=<alias>");
         } else {
             String command = arguments.get(0).split("=")[0];
