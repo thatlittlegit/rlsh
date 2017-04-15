@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import static java.lang.System.out;
 
 public class InputLoop /*implements Runnable*/ {
@@ -18,7 +21,7 @@ public class InputLoop /*implements Runnable*/ {
         String input = null;
         while(Boolean.toBoolean(DataManager.get("rlsh", "continue-shell").bool)) {
             if(Boolean.toBoolean(DataManager.get("rlsh", "ps1-calculated").bool) == true) {
-                out.print(DataManager.get("rlsh", "ps1").string);
+                out.print(StringUtils.replace(DataManager.get("rlsh", "ps1").string, SystemUtils.USER_HOME, "~"));
                 try {
                     input = scanner.nextLine();
                 } catch(NoSuchElementException e) {

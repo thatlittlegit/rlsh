@@ -29,7 +29,7 @@ public class RlshShell implements Shell {
             System.out.println("rlsh: java.net.UnknownHostException: " + e.getMessage());
             DataManager.put("rlsh", "stringvar-computer", new CompiledValue("my-computer"));
         }
-        DataManager.put("rlsh", "stringvar-directory", new CompiledValue("/"));
+        DataManager.put("rlsh", "stringvar-directory", new CompiledValue(SystemUtils.USER_HOME));
         DataManager.put("rlsh", "directory", DataManager.get("rlsh", "stringvar-directory"));
 
         DataManager.put("rlsh", "shell-builtin-class", new CompiledValue("rlsh.RlshShellBuiltinList"));
