@@ -146,32 +146,34 @@ public class CommandParser {
             // Scan the PATH
             String[] folderPaths = DataManager.get("rlsh", "path").string.split(":");
             boolean success = false;
-            for(String folderPath : folderPaths) {
-                File folder = new File(folderPath);
-                try {
-                    for(File file : folder.listFiles()) {
-                        if(file.exists() && !file.isDirectory()) {
-                            if(file.getName().replace("\\s+", "").equals(c.name.replace("\\s+", ""))) {
-                                // found a match!
-                                success = true;
-                                ArrayList<String> arguments = c.arguments;
-                                arguments.add(0, file.getAbsolutePath());
-                                ProcessBuilder p = new ProcessBuilder(arguments);
-                                p.directory(new File(DataManager.get("rlsh", "directory").string));
-                                p.inheritIO();
-                                p.start().waitFor();
-                                break;
+            if(!wapi.core.Boolean.toBoolean(DataManager.get("rlsh", "only-lowbuiltins").bool)) {
+                for(String folderPath : folderPaths) {
+                    File folder = new File(folderPath);
+                    try {
+                        for(File file : folder.listFiles()) {
+                            if(file.exists() && !file.isDirectory()) {
+                                if(file.getName().replace("\\s+", "").equals(c.name.replace("\\s+", ""))) {
+                                    // found a match!
+                                    success = true;
+                                    ArrayList<String> arguments = c.arguments;
+                                    arguments.add(0, file.getAbsolutePath());
+                                    ProcessBuilder p = new ProcessBuilder(arguments);
+                                    p.directory(new File(DataManager.get("rlsh", "directory").string));
+                                    p.inheritIO();
+                                    p.start().waitFor();
+                                    break;
+                                }
                             }
                         }
+                    } catch(NullPointerException e) {/* do nothing */
+                    } catch(InterruptedException e) {/* still do nothing*/
+                    } catch(IllegalArgumentException e) {
+                        System.err.println("rlsh: error: Not enough arguments provided to programmic command");
+                        e.printStackTrace();
+                    } catch(IOException e) {
+                        System.err.println("rlsh: error: An I/O error occurred. Please file a bug report.");
+                        e.printStackTrace();
                     }
-                } catch(NullPointerException e) {/* do nothing */
-                } catch(InterruptedException e) {/* still do nothing*/
-                } catch(IllegalArgumentException e) {
-                    System.err.println("rlsh: error: Not enough arguments provided to programmic command");
-                    e.printStackTrace();
-                } catch(IOException e) {
-                    System.err.println("rlsh: error: An I/O error occurred. Please file a bug report.");
-                    e.printStackTrace();
                 }
             }
             if(success != true) {
