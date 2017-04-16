@@ -18,17 +18,26 @@ public class CommandLs extends Command implements CommandAction {
     public void run() {
         File directory = new File(DataManager.get("rlsh", "directory").string);
 
-        if(arguments.size() < 2) {
-            // just print it
-            int filePrintedOf4 = 0;
-            for(File file : directory.listFiles()) {
-                System.out.print(file.getName() + "  ");
-                filePrintedOf4 += 1;
-                if(filePrintedOf4 > 4) {
-                    System.out.print("\n");
-                    filePrintedOf4 = 0;
-                }
+        if(arguments.size() > 0) {
+            if(arguments.get(0).equals("--help") || arguments.get(0).equals("-h")) {
+                System.out.println("rlsh: ls: Usage: ls [directory]");
+                return;
+            }
+            if(arguments.get(0).startsWith("/")) {
+                directory = new File(arguments.get(0));
+            } else {
+                directory = new File(DataManager.get("rlsh", "directory").string);
             }
         }
+        int filePrintedOf4 = 0;
+        for(File file : directory.listFiles()) {
+            System.out.print(file.getName() + "  ");
+            filePrintedOf4 += 1;
+            if(filePrintedOf4 > 4) {
+                System.out.print("\n");
+                    filePrintedOf4 = 0;
+            }
+        }
+        System.out.println("");
     }
 }

@@ -44,8 +44,10 @@ public class CommandCp extends Command implements CommandAction {
     }
 
     public void run() {
-        if(arguments.size() < 2) {
-            System.err.println("rlsh: cp: Not enough arguments");
+        if(arguments.size() < 2 || (arguments.get(0).equals("--help") || arguments.get(0).equals("-h"))) {
+            if(arguments.size() < 2) {
+                System.err.println("rlsh: cp: Not enough arguments");
+            }
             System.err.println("rlsh: cp: Usage: cp <from> <to>");
         } else if(arguments.size() > 2) {
             System.out.println("rlsh: cp: Note: since you supplied more than the expected amount of ");

@@ -15,7 +15,7 @@ public class CommandRmdir extends Command implements CommandAction {
     }
 
     public void run() {
-        if(arguments.size() == 0 || (arguments.get(0) == "--help" || arguments.get(0) == "-h")) {
+        if(arguments.size() == 0 || (arguments.get(0).equals("--help") || arguments.get(0).equals("-h"))) {
             if(arguments.size() == 0) {
                 System.err.println("rlsh: rmdir: Missing operand");
             }
