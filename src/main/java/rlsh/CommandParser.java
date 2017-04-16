@@ -146,7 +146,13 @@ public class CommandParser {
             // Scan the PATH
             String[] folderPaths = DataManager.get("rlsh", "path").string.split(":");
             boolean success = false;
-            if(!wapi.core.Boolean.toBoolean(DataManager.get("rlsh", "only-lowbuiltins").bool)) {
+            boolean onlyLowBuiltins;
+            try {
+                onlyLowBuiltins = !wapi.core.Boolean.toBoolean(DataManager.get("rlsh", "only-lowbuiltins").bool);
+            } catch(NullPointerException e) {
+                onlyLowBuiltins = false;
+            }
+            if(onlyLowBuiltins) {
                 for(String folderPath : folderPaths) {
                     File folder = new File(folderPath);
                     try {

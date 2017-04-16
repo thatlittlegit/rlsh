@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.io.File;
 
 import wapi.core.DataManager;
+import wapi.core.NullChecker;
 
 public class CommandLs extends Command implements CommandAction {
     public CommandLs(ArrayList<String> arguments) {
@@ -25,6 +26,8 @@ public class CommandLs extends Command implements CommandAction {
             }
             if(arguments.get(0).startsWith("/")) {
                 directory = new File(arguments.get(0));
+            } else if(!NullChecker.isNull(arguments.get(0))) {
+                directory = new File(DataManager.get("rlsh", "directory").string + "/" + arguments.get(0));
             } else {
                 directory = new File(DataManager.get("rlsh", "directory").string);
             }

@@ -41,11 +41,15 @@ public class CommandMv extends Command implements CommandAction {
     }
 
     public void run() {
-        if(arguments.size() < 2) {
-            System.err.println("rlsh: mv: Missing arguments");
-            System.err.println("rlsh: mv: Usage: mv <from> <to>");
-        } else if(arguments.size() > 2) {
-            System.err.println("rlsh: mv: Too many arguments!");
+        if(arguments.size() != 2) {
+            if(arguments.size() != 1) {
+                if(arguments.size() < 2) {
+                    System.err.println("rlsh: mv: Missing arguments");
+                } else if(arguments.size() > 2) {
+                    System.err.println("rlsh: mv: Too many arguments!");
+                }
+            }
+
             System.err.println("rlsh: mv: Usage: mv <from> <to>");
         } else {
             if(arguments.get(0).startsWith("/")) {
