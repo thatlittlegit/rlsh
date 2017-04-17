@@ -32,6 +32,7 @@ public class RlshShell implements Shell {
         DataManager.put("rlsh", "stringvar-directory", new CompiledValue(SystemUtils.USER_HOME));
         DataManager.put("rlsh", "directory", DataManager.get("rlsh", "stringvar-directory"));
 
+        DataManager.put("rlsh", "shell-low-builtin-class", new CompiledValue("rlsh.RlshShellLowBuiltinList"));
         DataManager.put("rlsh", "shell-builtin-class", new CompiledValue("rlsh.RlshShellBuiltinList"));
 
         // TODO let user change the default PS1

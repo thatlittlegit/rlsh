@@ -147,37 +147,66 @@ public class CommandParser {
             // Scan the PATH
             String[] folderPaths = DataManager.get("rlsh", "path").string.split(":");
             boolean success = false;
-            for(String folderPath : folderPaths) {
-                File folder = new File(folderPath);
-                try {
-                    for(File file : folder.listFiles()) {
-                        if(file.exists() && !file.isDirectory()) {
-                            if(file.getName().replace("\\s+", "").equals(c.name.replace("\\s+", ""))) {
-                                // found a match!
-                                success = true;
-                                ArrayList<String> arguments = c.arguments;
-                                arguments.add(0, file.getAbsolutePath());
-                                ProcessBuilder p = new ProcessBuilder(arguments);
-                                p.directory(new File(DataManager.get("rlsh", "directory").string));
-                                p.inheritIO();
-                                p.start().waitFor();
-                                break;
+            boolean onlyLowBuiltins;
+            try {
+                onlyLowBuiltins = !wapi.core.Boolean.toBoolean(DataManager.get("rlsh", "only-lowbuiltins").bool);
+            } catch(NullPointerException e) {
+                onlyLowBuiltins = false;
+            }
+            if(onlyLowBuiltins) {
+                for(String folderPath : folderPaths) {
+                    File folder = new File(folderPath);
+                    try {
+                        for(File file : folder.listFiles()) {
+                            if(file.exists() && !file.isDirectory()) {
+                                if(file.getName().replace("\\s+", "").equals(c.name.replace("\\s+", ""))) {
+                                    // found a match!
+                                    success = true;
+                                    ArrayList<String> arguments = c.arguments;
+                                    arguments.add(0, file.getAbsolutePath());
+                                    ProcessBuilder p = new ProcessBuilder(arguments);
+                                    p.directory(new File(DataManager.get("rlsh", "directory").string));
+                                    p.inheritIO();
+                                    p.start().waitFor();
+                                    break;
+                                }
                             }
                         }
+                    } catch(NullPointerException e) {/* do nothing */
+                    } catch(InterruptedException e) {/* still do nothing*/
+                    } catch(IllegalArgumentException e) {
+                        System.err.println("rlsh: error: Not enough arguments provided to programmic command");
+                        e.printStackTrace();
+                    } catch(IOException e) {
+                        System.err.println("rlsh: error: An I/O error occurred. Please file a bug report.");
+                        e.printStackTrace();
                     }
-                } catch(NullPointerException e) {/* do nothing */
-                } catch(InterruptedException e) {/* still do nothing*/
-                } catch(IllegalArgumentException e) {
-                    System.err.println("rlsh: error: Not enough arguments provided to programmic command");
-                    e.printStackTrace();
-                } catch(IOException e) {
-                    System.err.println("rlsh: error: An I/O error occurred. Please file a bug report.");
-                    e.printStackTrace();
                 }
             }
             if(success != true) {
                 if(!c.name.equals("")) {
-                    System.err.println("rlsh: Command " + c.name + " not found.");
+                    Hashtable<String, Class<Command>> lowBuiltins = getFluidBuiltins(BuiltinType.LOW_BUILTIN);
+
+                    boolean isLowBuiltin = false;
+                    try {
+                        isLowBuiltin = lowBuiltins.get(c.name) != null;
+                    } catch(NullPointerException e) {}
+
+                    if(isLowBuiltin) {
+                        try {
+                            Constructor<Command> toRun = lowBuiltins.get(c.name).getDeclaredConstructor(ArrayList.class);
+                            CommandAction action = toRun.newInstance(c.arguments).action;
+
+                            action.run();
+                        } catch(Exception e) {
+                            System.err.println("rlsh: error: Failed to run low-builtin command. This is a problem with your");
+                            System.err.println("rlsh: error: installation or a plugin. Try removing some plugins.");
+                            e.printStackTrace();
+                            System.exit(-10);
+                        }
+                    } else {
+                        System.err.println("rlsh: Command " + c.name + " not found.");
+                    }
                 }
                 // don't do anything if command blank
             }
