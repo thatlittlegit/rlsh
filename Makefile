@@ -6,6 +6,7 @@
 
 TEMP_DIR=/tmp
 CURRENT_DIR=$(shell pwd)
+SPHINX=sphinx-build
 
 COMPILE=YES
 
@@ -14,6 +15,8 @@ ifeq ($(COMPILE),YES)
 else
 	COMPILER=@echo 'Compiling Disabled!'
 endif
+
+.PHONY: docs
 
 rlsh:
 	$(COMPILER)
@@ -27,3 +30,7 @@ run:
 	-wget "https://search.maven.org/remotecontent?filepath=commons-io/commons-io/2.5/commons-io-2.5.jar" -nc \
 	-O "build/libs/commons-io-2.5.jar"
 	java -cp "build/libs/wapi-1.0.6.jar:build/libs/commons-lang3-3.5.jar:build/libs/rlsh.jar:build/libs/commons-io-2.5.jar" rlsh.RlshShell
+
+docs:
+	$(SPHINX) "docs" "docs/built"
+	$(SPHINX) -b man "docs" "docs/built"
