@@ -31,10 +31,10 @@ public class CommandMv extends Command implements CommandAction {
         } catch(FileExistsException e) {
             try {
                 FileUtils.forceDelete(to);
+                move(from, to);
             } catch(IOException ioe) {
                 System.err.println("rlsh: mv: Error deleting old " + to.getName() + ": " + ioe.getMessage());
             }
-            move(from, to);
         } catch(IOException e) {
             System.err.println("rlsh: mv: Failed to move file, does it exist? (" + e.getMessage() + ")");
         }

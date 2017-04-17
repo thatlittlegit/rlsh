@@ -19,7 +19,6 @@ public class CommandMkdir extends Command implements CommandAction {
     }
 
     private void mkdir(File file, boolean parent) {
-        System.out.println(file.getAbsolutePath() + " *-* " + parent);
         if(parent) {
             if(!file.mkdirs()) {
                 showError(file.getName());
@@ -44,7 +43,6 @@ public class CommandMkdir extends Command implements CommandAction {
             if(arguments.size() > 1) {
                 // Parse arguments
                 for(String argument : arguments) {
-                    System.out.println(argument);
                     if(argument.equals("-h") || argument.equals("--help")) {
                         help = true;
                         break;
