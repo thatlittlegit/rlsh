@@ -19,7 +19,7 @@ master_doc = "index"
 # Project name
 project = u"rlsh"
 # Copyright info
-copyright = u"2017, wapidstyle"
+copyright = u"Copyright 2017 wapidstyle and all other contributors. Under the BSD-3 license."
 # Author
 author = u"wapidstyle"
 # Version
@@ -70,7 +70,7 @@ latex_documents = [
 # -- Manpage
 # source, name, description, authors, section
 man_pages = [
-    ("manpage", "rlsh", "rlsh Documentation",
+    ("manpage", "rlsh", "A basic shell written in Java",
      u"wapidstyle", 1)
 ]
 # -- Texinfo
