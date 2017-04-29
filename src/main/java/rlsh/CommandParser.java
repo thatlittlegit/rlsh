@@ -153,7 +153,7 @@ public class CommandParser {
             } catch(NullPointerException e) {
                 onlyLowBuiltins = false;
             }
-            if(onlyLowBuiltins) {
+            if(!onlyLowBuiltins) {
                 for(String folderPath : folderPaths) {
                     File folder = new File(folderPath);
                     try {
