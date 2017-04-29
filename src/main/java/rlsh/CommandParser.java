@@ -82,7 +82,22 @@ public class CommandParser {
             alias = false;
         }
 
-        if(alias) {
+        boolean needToSplit;
+        try {
+            needToSplit = c.completeInput.split(";").length > 0;
+        } catch(NullPointerException e) {
+            needToSplit = false;
+        }
+        // Split it by ; before parsing it
+        if(needToSplit) {
+            for(String command : c.completeInput.split(";")) {
+                ArrayList<String> arguments = new ArrayList<String>(Arrays.asList(command.split(" ")));
+                arguments.remove(0);
+                Command newCommand = new Command(command.split(" ")[0], arguments, null);
+                c.completeInput = command;
+                CommandParser.run(newCommand);
+            }
+        } else if(alias) {
             ArrayList<String> arguments = new ArrayList<>(c.arguments);
             try {
                 ArrayList<String> tempArgs = new ArrayList<>();

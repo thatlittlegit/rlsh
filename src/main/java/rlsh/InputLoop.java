@@ -34,6 +34,7 @@ public class InputLoop /*implements Runnable*/ {
                 ArrayList<String> arguments = new ArrayList<>(Arrays.asList(input.split(" ")));
                 arguments.remove(0); // Remove the name from the arguments
                 Command c = new Command(name, arguments, null);
+                c.completeInput = input;
                 CommandParser.run(c);
             } else {
                 DataManager.put("rlsh", "ps1", new CompiledValue(StringFormatter.format(DataManager.get("rlsh", "ps1-uncalculated").string)));
