@@ -14,66 +14,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class CommandParser {
-    static Hashtable<String, Class<Command>> getFluidBuiltins(BuiltinType type) throws IllegalArgumentException {
-        String packageTypeToLookFor;
-        switch(type) {
-        case BUILTIN:
-            packageTypeToLookFor = "builtin-class";
-            break;
-        case LOW_BUILTIN:
-            packageTypeToLookFor = "low-builtin-class";
-            break;
-        default:
-            throw new IllegalArgumentException("Failed to determine builtin type.");
-        }
-
-        try {
-            // get the builtin class
-            Class<?> rlshShellBuiltins = Class.forName(DataManager.get("rlsh", "shell-" +
-                                                                       packageTypeToLookFor).string);
-            // check if it's processed the builtins
-            Boolean hasChecked = (Boolean) rlshShellBuiltins.getDeclaredMethod("getIsFilled").invoke(null);
-            if(!hasChecked.booleanValue()) {
-                // if not, process them
-                rlshShellBuiltins.getDeclaredMethod("fillBuiltins").invoke(null);
-            }
-            // now, get them as a Hashtable
-            @SuppressWarnings("unchecked")
-            Hashtable<String, Class<Command>> builtins = (Hashtable<String, Class<Command>>) rlshShellBuiltins.
-                getField("builtins").get(null);
-            return builtins;
-        } catch(NoSuchFieldException e) {
-            System.err.println("rlsh: error: Shell builtin list does not contain Hashtable map, this is a problem");
-            System.err.println("rlsh: error: with your installation or a plugin. Try removing some plugins.");
-            e.printStackTrace();
-            System.exit(-2);
-        } catch(IllegalAccessException e) {
-            System.err.println("rlsh: error: Failed to access necessary fields in shell builtin list. This is");
-            System.err.println("rlsh: error: a problem with your installation or a plugin. Try removing some");
-            System.err.println("rlsh: error: plugins.");
-            e.printStackTrace();
-            System.exit(-3);
-        } catch(ClassNotFoundException e) {
-            System.err.println("rlsh: error: Builtin class not found, this is a problem with your installation");
-            System.err.println("rlsh: error: or a plugin. Try removing some plugins");
-            e.printStackTrace();
-            System.exit(-4);
-        } catch(InvocationTargetException e) {
-            System.err.println("rlsh: error: An error occurred while processing builtins, this is a problem with");
-            System.err.println("rlsh: error: a plugin.");
-            e.printStackTrace();
-            System.exit(-5);
-        } catch(NoSuchMethodException e) {
-            System.err.println("rlsh: error: A required function for builtin management is missing, this is a");
-            System.err.println("rlsh: error: problem with a plugin.");
-            e.printStackTrace();
-            System.exit(-6);
-        }
-        return null;
-    }
-
     public static void run(Command c) {
-        Hashtable<String, Class<Command>> builtins = getFluidBuiltins(BuiltinType.BUILTIN);
+        Hashtable<String, Class<Command>> builtins = HashtableFromReferenceFinder.
+            getHashtableFromBuiltinType(HashtableFromReferenceFinder.BuiltinType.BUILTIN);
 
         boolean alias;
         try {
@@ -200,7 +143,8 @@ public class CommandParser {
             }
             if(success != true) {
                 if(!c.name.equals("")) {
-                    Hashtable<String, Class<Command>> lowBuiltins = getFluidBuiltins(BuiltinType.LOW_BUILTIN);
+                    Hashtable<String, Class<Command>> lowBuiltins = HashtableFromReferenceFinder.
+                        getHashtableFromBuiltinType(HashtableFromReferenceFinder.BuiltinType.LOW_BUILTIN);
 
                     boolean isLowBuiltin = false;
                     try {
@@ -227,8 +171,4 @@ public class CommandParser {
             }
         }
     }
-}
-
-enum BuiltinType {
-    BUILTIN, LOW_BUILTIN
 }
