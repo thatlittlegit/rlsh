@@ -1,13 +1,17 @@
 package rlsh.parser;
 
 import rlsh.Command;
+import rlsh.CommandParser;
 
 import wapi.core.DataManager;
+
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class ParserModuleAlias implements ParserModule {
     public static final String name = "alias";
 
-    public void getName() {
+    public String getName() {
         return name;
     }
 
@@ -27,11 +31,12 @@ public class ParserModuleAlias implements ParserModule {
         ArrayList<String> arguments = new ArrayList<>(command.arguments);
 
         try {
-            ArrayList<String> aliasArguments = new ArrayList<>(DataManager.get("rlsh", "alias-" + command.name + "-arguments")
-                                                               .string.split(" "));
+            ArrayList<String> aliasArguments = new ArrayList<String>(Arrays.asList(DataManager.
+                                                               get("rlsh", "alias-" + command.name + "-arguments").
+                                                                                   string.split(" ")));
             aliasArguments.remove(0);
             arguments.addAll(aliasArguments);
         } catch(NullPointerException e) {}
-        CommandParser.run(new Command(DataManager.get("rlsh", "alias-" + c.name).string, arguments));
+        CommandParser.run(new Command(DataManager.get("rlsh", "alias-" + command.name).string, arguments));
     }
 }

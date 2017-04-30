@@ -2,6 +2,8 @@ package rlsh.parser;
 
 import rlsh.BuiltinType;
 import rlsh.Command;
+import rlsh.CommandAction;
+import rlsh.CommandParser;
 import rlsh.HashtableFromReferenceFinder;
 
 import java.util.ArrayList;
@@ -19,13 +21,13 @@ public class ParserModuleBuiltin implements ParserModule {
     }
 
     public boolean getIfNeedToRun(Command command) {
-        return NullChecker.isNull(HashtableFromReferenceFinder.getHashtableFromBuiltinType(BuiltinType.BUILTINS)
+        return NullChecker.isNull(HashtableFromReferenceFinder.getHashtableFromBuiltinType(BuiltinType.BUILTIN)
                                   .get(command.name));
     }
 
     public void run(Command command) {
         Hashtable<String, Class<Command>> builtins = HashtableFromReferenceFinder.
-            getHashtableFromBuiltinType(BuiltinType.BUILTINS);
+            getHashtableFromBuiltinType(BuiltinType.BUILTIN);
         try {
             Constructor<Command> toRun = builtins.get(command.name).getDeclaredConstructor(ArrayList.class);
             CommandAction action = toRun.newInstance(command.arguments).action;
