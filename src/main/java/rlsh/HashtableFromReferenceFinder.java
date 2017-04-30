@@ -64,8 +64,4 @@ public class HashtableFromReferenceFinder {
             throw new IllegalArgumentException("Failed to determine builtin type.");
         }
     }
-
-    enum BuiltinType {
-        BUILTIN, LOW_BUILTIN
-    }
 }

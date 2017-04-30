@@ -16,7 +16,7 @@ import java.io.IOException;
 public class CommandParser {
     public static void run(Command c) {
         Hashtable<String, Class<Command>> builtins = HashtableFromReferenceFinder.
-            getHashtableFromBuiltinType(HashtableFromReferenceFinder.BuiltinType.BUILTIN);
+            getHashtableFromBuiltinType(BuiltinType.BUILTIN);
 
         boolean alias;
         try {
@@ -144,7 +144,7 @@ public class CommandParser {
             if(success != true) {
                 if(!c.name.equals("")) {
                     Hashtable<String, Class<Command>> lowBuiltins = HashtableFromReferenceFinder.
-                        getHashtableFromBuiltinType(HashtableFromReferenceFinder.BuiltinType.LOW_BUILTIN);
+                        getHashtableFromBuiltinType(BuiltinType.LOW_BUILTIN);
 
                     boolean isLowBuiltin = false;
                     try {
