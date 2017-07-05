@@ -3,6 +3,9 @@ package rlsh.parser;
 import rlsh.Command;
 import rlsh.CommandParser;
 
+import java.util.Arrays;
+import java.util.ArrayList;
+
 public class ParserModuleSeperator implements ParserModule {
     public static final String name = "seperator";
 
@@ -24,7 +27,7 @@ public class ParserModuleSeperator implements ParserModule {
 	    arguments.remove(0);
 	    Command newCommand = new Command(command.split(" ")[0], arguments, null);
 	    rawCommand.completeInput = command;
-	    CommandParser.run(command);
+	    CommandParser.run(newCommand);
 	}
     }
 }

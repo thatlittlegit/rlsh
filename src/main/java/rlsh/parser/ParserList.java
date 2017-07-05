@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class ParserList {
     public static Hashtable<String, Class<?>> parsers = new Hashtable<>();
 
-    private static bolean hasFilled = false;
+    private static boolean hasFilled = false;
 
     static void fillParserList() {
 	try {
