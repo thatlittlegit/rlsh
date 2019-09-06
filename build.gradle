@@ -1,23 +1,31 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'rlsh.RlshShell'
-
 repositories {
 	maven {
-		url 'http://wapidstyle.bitbucket.io/'
-		name 'wapidstyle\'s repo'
+		url 'http://thatlittlegit.github.io/maven-repo/jars'
+		name 'thatlittlegit\'s repo'
 	}
 	mavenCentral()
 }
 
 dependencies {
-	compile group: 'wapidstyle', name: 'wapi', version: '1.0.7'
-  compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
-  compile group: 'commons-io', name: 'commons-io', version: '2.5'
+	compile 'wapidstyle:wapi:1.0.7'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 compileJava {
   options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
+application {
+	mainClassName = 'rlsh.RlshShell'
+}
+run.standardInput = System.in;
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'rlsh.RlshShell'
+	}
+}

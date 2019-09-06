@@ -2,24 +2,20 @@
 #### Redone Light SHell
 `rlsh` is a shell meant for me on Windows and maybe on Linux. It is supposed to be very compatible with Bash, and also be extensible.
 ## Building
-Use `make`.
+Use the Gradle wrapper.
 
 ```shell
-# To just build rlsh
-make
-# To build and run
-make run
-# To run but not build
-make COMPILE=no run
-```
-
-If you must, use gradle:
-```shell
+# To build rlsh (no meaningful output)
 ./gradlew assemble
+# To build a ZIP file for rlsh
+./gradlew distZip
+# To build and run
+./gradlew run --console=plain
+# To build a JAR file (you'll have to hook up the classpath!)
+./gradlew jar
 ```
 
 ## Roadmap
-* Use Gradle for everything and just have Make a polyfill 
 * Add piping (to `stdin` and files) 
 
 ## Framework
